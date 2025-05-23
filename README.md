@@ -23,6 +23,9 @@ If you have any suggestions or ideas to improve the Unit Converter, feel free to
 <br><br>
 In case of any issues, please post them in the issue tracker. For confidential inquiries, you can email me directly.
 
+## Acknowledgements
+I thank Vincent Garrido for his testing efforts and valuable suggestions.
+
 
 
 

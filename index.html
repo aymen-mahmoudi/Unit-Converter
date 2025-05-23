@@ -25,6 +25,7 @@
                 <option value="mass">Mass</option>
                 <option value="area">Area</option>
                 <option value="length">Length</option>
+                <option value="speed">Speed</option> <!-- Add this line -->
             </select>
         </div>
         <div class="mb-4">
@@ -49,7 +50,7 @@
     <script>
         const conversionFactors = {
             energy: {
-                units: ['eV', 'meV', 'nm', 'cm⁻¹', 'GHz', 'ps', 'fs', 'J', 'cal', 'kWh'],
+                units: ['eV', 'meV', 'nm', 'cm⁻¹', 'GHz', 'THz', 'ps', 'fs', 'J', 'cal', 'kWh', 'T'],
                 factors: {
                     eV: (val, to) => {
                         if (val === 0 && ['nm', 'cm⁻¹', 'ps', 'fs'].includes(to)) return NaN;
@@ -62,6 +63,8 @@
                         if (to === 'J') return val * 1.602176634e-19;
                         if (to === 'cal') return val * 3.826733e-20;
                         if (to === 'kWh') return val * 4.467037e-26;
+                        if (to === 'THz') return val / 0.004135667696;
+                        if (to === 'T') return val / 8.617333262e-5;
                         return val;
                     },
                     meV: (val, to) => {
@@ -75,6 +78,8 @@
                         if (to === 'J') return (val / 1000) * 1.602176634e-19;
                         if (to === 'cal') return (val / 1000) * 3.826733e-20;
                         if (to === 'kWh') return (val / 1000) * 4.467037e-26;
+                        if (to === 'THz') return (val / 1000) / 0.004135667696;
+                        if (to === 'T') return (val / 1000) / 8.617333262e-5;
                         return val;
                     },
                     nm: (val, to) => {
@@ -88,6 +93,8 @@
                         if (to === 'J') return (1239.84193 / val) * 1.602176634e-19;
                         if (to === 'cal') return (1239.84193 / val) * 3.826733e-20;
                         if (to === 'kWh') return (1239.84193 / val) * 4.467037e-26;
+                        if (to === 'THz') return (1239.84193 / val) / 0.004135667696;
+                        if (to === 'T') return (1239.84193 / val) / 8.617333262e-5;
                         return val;
                     },
                     'cm⁻¹': (val, to) => {
@@ -101,6 +108,8 @@
                         if (to === 'J') return (val / 8065.54429) * 1.602176634e-19;
                         if (to === 'cal') return (val / 8065.54429) * 3.826733e-20;
                         if (to === 'kWh') return (val / 8065.54429) * 4.467037e-26;
+                        if (to === 'THz') return (val / 8065.54429) / 0.004135667696;
+                        if (to === 'T') return (val / 8065.54429) / 8.617333262e-5;
                         return val;
                     },
                     GHz: (val, to) => {
@@ -114,6 +123,8 @@
                         if (to === 'J') return (val * 4.135667696e-6) * 1.602176634e-19;
                         if (to === 'cal') return (val * 4.135667696e-6) * 3.826733e-20;
                         if (to === 'kWh') return (val * 4.135667696e-6) * 4.467037e-26;
+                        if (to === 'THz') return (val * 4.135667696e-6) / 0.004135667696;
+                        if (to === 'T') return (val * 4.135667696e-6) / 8.617333262e-5;
                         return val;
                     },
                     ps: (val, to) => {
@@ -127,6 +138,8 @@
                         if (to === 'J') return (4.135667696e-3 / val) * 1.602176634e-19;
                         if (to === 'cal') return (4.135667696e-3 / val) * 3.826733e-20;
                         if (to === 'kWh') return (4.135667696e-3 / val) * 4.467037e-26;
+                        if (to === 'THz') return (4.135667696e-3 / val) / 0.004135667696;
+                        if (to === 'T') return (4.135667696e-3 / val) / 8.617333262e-5;
                         return val;
                     },
                     fs: (val, to) => {
@@ -140,6 +153,8 @@
                         if (to === 'J') return (4.135667696 / val) * 1.602176634e-19;
                         if (to === 'cal') return (4.135667696 / val) * 3.826733e-20;
                         if (to === 'kWh') return (4.135667696 / val) * 4.467037e-26;
+                        if (to === 'THz') return (4.135667696 / val) / 0.004135667696;
+                        if (to === 'T') return (4.135667696 / val) / 8.617333262e-5;
                         return val;
                     },
                     J: (val, to) => {
@@ -180,7 +195,41 @@
                         if (to === 'J') return val * 3.6e6;
                         if (to === 'cal') return (val * 3.6e6) / 4.184;
                         return val;
-                    }
+                    },
+                    THz: (val, to) => {
+                        // 1 THz = 1e12 Hz
+                        // E (eV) = h * f / e, h = 6.62607015e-34 J·s, e = 1.602176634e-19 C
+                        // 1 THz = 4.135667696 meV = 0.004135667696 eV
+                        if (val === 0 && ['eV', 'meV', 'nm', 'cm⁻¹', 'GHz', 'ps', 'fs', 'J', 'cal', 'kWh', 'T'].includes(to)) return NaN;
+                        if (to === 'eV') return val * 0.004135667696;
+                        if (to === 'meV') return val * 4.135667696;
+                        if (to === 'GHz') return val * 1000;
+                        if (to === 'nm') return 299792458 / (val * 1e12) * 1e9; // λ = c/f, nm
+                        if (to === 'cm⁻¹') return val * 33.35641;
+                        if (to === 'ps') return 1 / (val * 1e3);
+                        if (to === 'fs') return 1 / (val * 1e6);
+                        if (to === 'J') return val * 6.62607015e-22;
+                        if (to === 'cal') return val * 1.584588e-22;
+                        if (to === 'kWh') return val * 1.840575e-25;
+                        if (to === 'T') return val * 47.99243; // 1 THz = 47.99243 K (k_B)
+                        return val;
+                    },
+                    T: (val, to) => {
+                        // 1 K = k_B = 8.617333262e-5 eV
+                        if (val === 0 && ['eV', 'meV', 'nm', 'cm⁻¹', 'GHz', 'THz', 'ps', 'fs', 'J', 'cal', 'kWh'].includes(to)) return NaN;
+                        if (to === 'eV') return val * 8.617333262e-5;
+                        if (to === 'meV') return val * 0.08617333262;
+                        if (to === 'GHz') return val * 2.0836612;
+                        if (to === 'THz') return val / 47.99243;
+                        if (to === 'nm') return 1239.84193 / (val * 8.617333262e-5);
+                        if (to === 'cm⁻¹') return val * 0.6950348;
+                        if (to === 'ps') return 4.135667696e-3 / (val * 8.617333262e-5);
+                        if (to === 'fs') return 4.135667696 / (val * 8.617333262e-5);
+                        if (to === 'J') return val * 1.380649e-23;
+                        if (to === 'cal') return val * 3.297623e-24;
+                        if (to === 'kWh') return val * 3.834025e-28;
+                        return val;
+                    },
                 }
             },
             pressure: {
@@ -259,6 +308,16 @@
                     Inch: 39.3701,
                     Angstrom: 1e10
                 }
+            },
+            speed: {
+                units: ['m/s', 'km/h', 'mph', 'ft/s', 'knot'],
+                factors: {
+                    'm/s': 1,
+                    'km/h': 3.6,
+                    'mph': 2.23694,
+                    'ft/s': 3.28084,
+                    'knot': 1.94384
+                }
             }
         };
 
@@ -282,7 +341,8 @@
             volume: ['Liter', 'Gallon'],
             mass: ['Kilogram', 'Pound'],
             area: ['Square Meter', 'Square Foot'],
-            length: ['Meter', 'Foot']
+            length: ['Meter', 'Foot'],
+            speed: ['m/s', 'km/h']
         };
 
         // Initialize unit options cache
